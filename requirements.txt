@@ -1,0 +1,15 @@
+streamlit
+langgraph
+langchain
+langchain-openai
+langchain-anthropic
+langchain-core
+chromadb
+pandas
+numpy
+folium
+streamlit-folium
+requests
+python-dotenv
+pydantic
+langchain-community
