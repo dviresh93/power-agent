@@ -1,0 +1,43 @@
+{
+  "timestamp": "2025-06-05T14:00:44.240697",
+  "summary": {
+    "total_tests": 2,
+    "total_passed": 2,
+    "pass_rate": 1.0,
+    "agent_reliability": "High"
+  },
+  "weather_decisions": {
+    "total_tests": 0,
+    "accuracy_passed": 0,
+    "reasoning_passed": 0,
+    "accuracy_rate": 0,
+    "reasoning_rate": 0
+  },
+  "chat_responses": {
+    "total_tests": 2,
+    "average_coverage": 1.0
+  },
+  "detailed_results": {
+    "weather_decisions": [
+      {
+        "error": "Setup failed: cannot import name 'PromptManager' from 'main' (/home/viresh/Documents/repo/power-agent/main.py)"
+      }
+    ],
+    "chat_responses": [
+      {
+        "question": "What wind speed threshold is used for classification?",
+        "topics_covered": 3,
+        "total_topics": 3,
+        "coverage_rate": 1.0,
+        "response_preview": "Based on the validation results context provided, the wind speed threshold used for outage classification is 40 mph.\n\nReports with sustained wind speeds exceeding 40 mph were likely classified as real..."
+      },
+      {
+        "question": "How can we improve false positive detection?",
+        "topics_covered": 3,
+        "total_topics": 3,
+        "coverage_rate": 1.0,
+        "response_preview": "Based on the validation results showing a 30% false positive rate for outage reports, there are a few potential recommendations to improve false positive detection:\n\n1. Sensor Calibration and Maintena..."
+      }
+    ]
+  }
+}

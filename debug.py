@@ -616,6 +616,53 @@ def main():
         return
     
     # Display validation results instead of generic dataset overview
+    # Define display_validation_results function that's missing
+    def display_validation_results():
+        """Display validation results with proper filtering"""
+        
+        st.header("🔍 Validation Results")
+        
+        validation_results = st.session_state.analysis_state.get('validation_results', {})
+        
+        if not validation_results:
+            st.warning("⚠️ No validation results available")
+            return
+        
+        stats = validation_results.get('statistics', {})
+        
+        # Key metrics
+        col1, col2, col3, col4 = st.columns(4)
+        
+        with col1:
+            st.metric(
+                "Total Reports", 
+                f"{stats.get('total_reports', 0):,}",
+                help="Original number of outage reports"
+            )
+        
+        with col2:
+            st.metric(
+                "Real Outages", 
+                f"{stats.get('real_count', 0):,}",
+                delta=f"-{stats.get('false_positive_count', 0)} false positives",
+                delta_color="normal",
+                help="Confirmed outages after validation"
+            )
+        
+        with col3:
+            st.metric(
+                "Actual Customers Affected", 
+                f"{stats.get('total_customers_actually_affected', 0):,}",
+                help="Customers affected by real outages only"
+            )
+        
+        with col4:
+            st.metric(
+                "False Positive Rate", 
+                f"{stats.get('false_positive_rate', 0):.1f}%",
+                help="Percentage of reports that were false positives"
+            )
+    
     display_validation_results()
     
     st.divider()

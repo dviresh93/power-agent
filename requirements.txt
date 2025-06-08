@@ -13,3 +13,10 @@ requests
 python-dotenv
 pydantic
 langchain-community
+deepeval
+joblib
+requests-cache
+reportlab
+matplotlib
+seaborn
+geopy

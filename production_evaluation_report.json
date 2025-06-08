@@ -1,0 +1,146 @@
+{
+  "timestamp": "2025-06-05T14:17:15.720755",
+  "summary": {
+    "total_tests": 8,
+    "total_passed": 4,
+    "pass_rate": 0.5,
+    "agent_reliability": "Low"
+  },
+  "weather_validation": {
+    "total_tests": 5,
+    "accuracy_tests_passed": 4,
+    "reasoning_tests_passed": 5,
+    "accuracy_rate": 0.8,
+    "reasoning_rate": 1.0
+  },
+  "chat_responses": {
+    "total_tests": 3,
+    "quality_tests_passed": 0,
+    "quality_rate": 0.0,
+    "average_topic_coverage": 0.3333333333333333
+  },
+  "detailed_results": {
+    "weather_validation": [
+      {
+        "scenario_name": "Clear False Positive - Perfect Conditions",
+        "expected_classification": "FALSE POSITIVE",
+        "actual_output": "FALSE POSITIVE\n\nAnalysis:\nBased on the provided weather conditions, this outage report is likely a false positive and not indicative of a real widespread outage event. The reasoning is as follows:\n\n1. Temperature: 18.0\u00b0C (64.4\u00b0F) is a mild temperature and does not represent an extreme condition that could cause equipment failures or power disruptions.\n\n2. Precipitation: 0.0 mm/h indicates no precipitation, which rules out the possibility of heavy rain, snow, or ice accumulation that could impact power lines or equipment.\n\n3. Wind Speed: 8.0 km/h (4.97 mph) is a relatively low wind speed, well below the threshold of 25 mph sustained winds or 35 mph gusts that could potentially cause damage to power infrastructure.\n\n4. Wind Gusts: 12.0 km/h (7.46 mph) is also a low wind gust speed, further confirming that wind conditions were not severe enough to cause widespread outages.\n\n5. Snowfall: 0.0 cm indicates no snow accumulation, ruling out the possibility of heavy snow or ice buildup on power lines and equipment.\n\nGiven the mild weather conditions reported, it is highly unlikely that a single customer outage would be caused by severe weather events. This outage report is more likely a false positive, potentially due to localized equipment malfunction, data processing errors, or communication glitches.\n\nIn summary, the lack of extreme weather conditions, such as high winds, heavy precipitation, temperature extremes, or significant snow/ice accumulation, strongly suggests that this outage report is a false positive and not indicative of a real widespread outage event.",
+        "accuracy_score": 1.0,
+        "reasoning_score": 1.0,
+        "accuracy_passed": true,
+        "reasoning_passed": true,
+        "weather_conditions": {
+          "temperature": 18.0,
+          "precipitation": 0.0,
+          "wind_speed": 8.0,
+          "wind_gusts": 12.0,
+          "snowfall": 0.0
+        },
+        "response_preview": "FALSE POSITIVE\n\nAnalysis:\nBased on the provided weather conditions, this outage report is likely a false positive and not indicative of a real widespread outage event. The reasoning is as follows:\n\n1. Temperature: 18.0\u00b0C (64.4\u00b0F) is a mild temperatur..."
+      },
+      {
+        "scenario_name": "Clear Real Outage - High Wind Event",
+        "expected_classification": "REAL OUTAGE",
+        "actual_output": "REAL OUTAGE\n\nDetailed Analysis:\n\n1. Wind Conditions:\n   - The reported wind speed of 52.0 km/h (approximately 32 mph) and wind gusts of 68.0 km/h (approximately 42 mph) are indicative of high winds.\n   - Wind gusts exceeding 35 mph are considered strong enough to cause power outages, especially if sustained over an extended period.\n\n2. Precipitation:\n   - The reported precipitation rate of 3.2 mm/h (approximately 0.13 inches/hour) is relatively low and unlikely to cause significant issues on its own.\n\n3. Snowfall:\n   - The reported snowfall of 1.0 cm (approximately 0.4 inches) is minimal and unlikely to cause significant accumulation or issues.\n\n4. Temperature:\n   - The reported temperature of 2.0\u00b0C (approximately 35.6\u00b0F) is within a normal range and unlikely to contribute to outages.\n\nBased on the provided weather conditions, the high wind speeds and wind gusts are the most likely cause of the reported outage. Strong winds can damage power lines, poles, and other electrical infrastructure, leading to widespread outages.\n\nWhile the precipitation and snowfall amounts are relatively low, the combination of high winds and any precipitation or snow accumulation can exacerbate the impact on the power grid, increasing the likelihood of outages.\n\nTherefore, considering the high wind speeds and wind gusts, this outage report should be classified as a REAL OUTAGE caused by severe weather conditions.",
+        "accuracy_score": 1.0,
+        "reasoning_score": 1.0,
+        "accuracy_passed": true,
+        "reasoning_passed": true,
+        "weather_conditions": {
+          "temperature": 2.0,
+          "precipitation": 3.2,
+          "wind_speed": 52.0,
+          "wind_gusts": 68.0,
+          "snowfall": 1.0
+        },
+        "response_preview": "REAL OUTAGE\n\nDetailed Analysis:\n\n1. Wind Conditions:\n   - The reported wind speed of 52.0 km/h (approximately 32 mph) and wind gusts of 68.0 km/h (approximately 42 mph) are indicative of high winds.\n   - Wind gusts exceeding 35 mph are considered str..."
+      },
+      {
+        "scenario_name": "Extreme Temperature Event",
+        "expected_classification": "REAL OUTAGE",
+        "actual_output": "REAL OUTAGE\n\nDetailed Analysis:\n\nBased on the provided weather conditions, this outage report is likely a REAL OUTAGE due to the following reasons:\n\n1. Temperature Extremes: The reported temperature of -18.0\u00b0C (approximately 0\u00b0F) is well below the threshold of 10\u00b0F, which can cause equipment failures, increased electrical demand for heating, and potential line damage due to ice/snow buildup.\n\n2. Snow Accumulation: The reported snowfall of 2.0 cm (approximately 0.8 inches) meets the threshold of 2 inches or more, which can lead to downed power lines, tree/vegetation interference, and increased electrical demand for heating.\n\n3. Wind Gusts: While the sustained wind speed of 20.0 km/h (approximately 12 mph) is below the 25 mph threshold, the reported wind gusts of 28.0 km/h (approximately 17 mph) are relatively high and can potentially cause damage to power lines, poles, and other equipment, especially when combined with the low temperatures and snow accumulation.\n\nThe combination of extreme low temperatures, snow accumulation, and moderate wind gusts creates conditions that can strain the power grid and lead to equipment failures, downed lines, and increased electrical demand. These factors support classifying this outage report as a REAL OUTAGE rather than a false positive.\n\nIt's important to note that while the precipitation rate of 0.5 mm/h is relatively low, it can still contribute to ice buildup on power lines and equipment when combined with the low temperatures, further exacerbating the outage conditions.",
+        "accuracy_score": 1.0,
+        "reasoning_score": 1.0,
+        "accuracy_passed": true,
+        "reasoning_passed": true,
+        "weather_conditions": {
+          "temperature": -18.0,
+          "precipitation": 0.5,
+          "wind_speed": 20.0,
+          "wind_gusts": 28.0,
+          "snowfall": 2.0
+        },
+        "response_preview": "REAL OUTAGE\n\nDetailed Analysis:\n\nBased on the provided weather conditions, this outage report is likely a REAL OUTAGE due to the following reasons:\n\n1. Temperature Extremes: The reported temperature of -18.0\u00b0C (approximately 0\u00b0F) is well below the th..."
+      },
+      {
+        "scenario_name": "Heavy Precipitation Event",
+        "expected_classification": "REAL OUTAGE",
+        "actual_output": "REAL OUTAGE\n\nAnalysis:\n\n1. Precipitation: The reported precipitation rate of 18.5 mm/h (0.73 inches/h) is considered heavy precipitation, which can cause power outages due to water ingress, tree/vegetation damage, and other weather-related issues.\n\n2. Wind Gusts: While the sustained wind speed of 25.0 km/h (15.5 mph) is not exceptionally high, the reported wind gusts of 35.0 km/h (21.7 mph) are above the threshold of 35 mph, which can cause damage to power lines, poles, and other infrastructure, leading to outages.\n\n3. Temperature: The reported temperature of 15.0\u00b0C (59\u00b0F) is within the normal range and does not indicate any temperature extremes that could cause outages.\n\n4. Snowfall: The reported snowfall of 0.0 cm (0 inches) does not suggest any significant snow accumulation that could contribute to outages.\n\nBased on the heavy precipitation and high wind gusts, it is reasonable to classify this outage report as a REAL OUTAGE. The combination of these weather conditions can cause significant damage to the power grid infrastructure, leading to power disruptions for customers in the affected area.",
+        "accuracy_score": 1.0,
+        "reasoning_score": 1.0,
+        "accuracy_passed": true,
+        "reasoning_passed": true,
+        "weather_conditions": {
+          "temperature": 15.0,
+          "precipitation": 18.5,
+          "wind_speed": 25.0,
+          "wind_gusts": 35.0,
+          "snowfall": 0.0
+        },
+        "response_preview": "REAL OUTAGE\n\nAnalysis:\n\n1. Precipitation: The reported precipitation rate of 18.5 mm/h (0.73 inches/h) is considered heavy precipitation, which can cause power outages due to water ingress, tree/vegetation damage, and other weather-related issues.\n\n2..."
+      },
+      {
+        "scenario_name": "Borderline Wind Conditions",
+        "expected_classification": "FALSE POSITIVE",
+        "actual_output": "REAL OUTAGE\n\nAnalysis:\n\nThe weather conditions reported indicate the presence of high winds, which can cause power outages. Specifically:\n\n1. Wind Speed: 38.0 km/h = 23.6 mph. This is close to the 25 mph threshold for high winds.\n\n2. Wind Gusts: 54.0 km/h = 33.6 mph. This exceeds the 35 mph threshold for damaging wind gusts.\n\nHigh winds can damage power lines, poles, and other electrical equipment, leading to outages. Even if the sustained wind speed is slightly below 25 mph, the presence of wind gusts over 35 mph is enough to potentially cause infrastructure damage and power interruptions.\n\nThe other weather parameters (temperature, precipitation, and snowfall) are within normal ranges and would not typically cause outages on their own.\n\nGiven the high wind gust readings, it is reasonable to classify this outage report as a REAL OUTAGE likely caused by wind-related infrastructure damage or line breaks, rather than a false positive from equipment malfunction or data errors.",
+        "accuracy_score": 0.0,
+        "reasoning_score": 0.8,
+        "accuracy_passed": false,
+        "reasoning_passed": true,
+        "weather_conditions": {
+          "temperature": 10.0,
+          "precipitation": 0.2,
+          "wind_speed": 38.0,
+          "wind_gusts": 54.0,
+          "snowfall": 0.0
+        },
+        "response_preview": "REAL OUTAGE\n\nAnalysis:\n\nThe weather conditions reported indicate the presence of high winds, which can cause power outages. Specifically:\n\n1. Wind Speed: 38.0 km/h = 23.6 mph. This is close to the 25 mph threshold for high winds.\n\n2. Wind Gusts: 54.0..."
+      }
+    ],
+    "chat_responses": [
+      {
+        "scenario_name": "Technical Threshold Inquiry",
+        "question": "What wind speed threshold does the system use to classify outages as real?",
+        "actual_output": "I don't have sufficient validation results to answer your question comprehensively. \n\n**Current Status:** Only raw dataset information is available from cache.\n\n**To get complete analysis:**\n1. Click 'Update Cache from Data Folder' in the sidebar\n2. This will load data from `data/raw_data.csv` and run full validation\n3. Once complete, I'll have detailed weather analysis and real vs false positive classifications\n\n**What I can tell you now:** Basic dataset statistics from the cached raw data. For detailed outage analysis, weather correlations, and false positive identification, please update the cache first.",
+        "quality_score": 0.6,
+        "quality_passed": false,
+        "topics_covered": 0,
+        "total_topics": 4,
+        "topic_coverage_rate": 0.0,
+        "response_preview": "I don't have sufficient validation results to answer your question comprehensively. \n\n**Current Status:** Only raw dataset information is available from cache.\n\n**To get complete analysis:**\n1. Click 'Update Cache from Data Folder' in the sidebar\n2. ..."
+      },
+      {
+        "scenario_name": "False Positive Reduction Strategy",
+        "question": "How can we reduce false positives in our outage detection system?",
+        "actual_output": "I don't have sufficient validation results to answer your question comprehensively. \n\n**Current Status:** Only raw dataset information is available from cache.\n\n**To get complete analysis:**\n1. Click 'Update Cache from Data Folder' in the sidebar\n2. This will load data from `data/raw_data.csv` and run full validation\n3. Once complete, I'll have detailed weather analysis and real vs false positive classifications\n\n**What I can tell you now:** Basic dataset statistics from the cached raw data. For detailed outage analysis, weather correlations, and false positive identification, please update the cache first.",
+        "quality_score": 0.6,
+        "quality_passed": false,
+        "topics_covered": 0,
+        "total_topics": 4,
+        "topic_coverage_rate": 0.0,
+        "response_preview": "I don't have sufficient validation results to answer your question comprehensively. \n\n**Current Status:** Only raw dataset information is available from cache.\n\n**To get complete analysis:**\n1. Click 'Update Cache from Data Folder' in the sidebar\n2. ..."
+      },
+      {
+        "scenario_name": "Statistical Summary Request",
+        "question": "What was the overall false positive rate in this analysis?",
+        "actual_output": "Based on the validation results provided, the overall false positive rate for this analysis was 38.2%.\n\nSpecifically, out of a total of 110 outage reports:\n\n- 68 were classified as real outages\n- 42 were classified as false positives\n\nThe false positive rate is calculated as:\n(false_positives / total_reports) x 100 = (42 / 110) x 100 = 38.2%\n\nA 38.2% false positive rate indicates that over one-third of the outage reports were incorrectly flagged and did not correspond to actual outages on the power grid. This highlights the importance of validating outage reports against other data sources to filter out false positives before taking action.",
+        "quality_score": 0.6,
+        "quality_passed": false,
+        "topics_covered": 4,
+        "total_topics": 4,
+        "topic_coverage_rate": 1.0,
+        "response_preview": "Based on the validation results provided, the overall false positive rate for this analysis was 38.2%.\n\nSpecifically, out of a total of 110 outage reports:\n\n- 68 were classified as real outages\n- 42 were classified as false positives\n\nThe false posit..."
+      }
+    ]
+  }
+}

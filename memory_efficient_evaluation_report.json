@@ -1,0 +1,54 @@
+{
+  "timestamp": "2025-06-05T13:57:24.273944",
+  "summary": {
+    "total_tests": 5,
+    "total_passed": 1,
+    "pass_rate": 0.2,
+    "agent_reliability": "Low"
+  },
+  "decision_points": {
+    "weather_threshold": {
+      "tests": 2,
+      "weather_accuracy": 0,
+      "false_positive_detection": 0
+    },
+    "temporal_analysis": {
+      "tests": 1,
+      "pattern_recognition": 1
+    },
+    "chat_responses": {
+      "tests": 2,
+      "recommendation_quality": 0
+    }
+  },
+  "detailed_results": {
+    "weather_decisions": [
+      {
+        "scenario": "Clear False Positive - Mild Weather",
+        "error": "'dict' object has no attribute 'parent_run_id'"
+      },
+      {
+        "scenario": "Clear Real Outage - Severe Wind",
+        "error": "'dict' object has no attribute 'parent_run_id'"
+      }
+    ],
+    "temporal_decisions": [
+      {
+        "scenario": "Midnight Clustering Pattern",
+        "temporal_pattern_score": 0.8,
+        "temporal_passed": true,
+        "response_preview": "Dataset analysis shows suspicious clustering with peak activity at midnight. Total reports: 2. Temporal pattern detected: {'hourly_distribution': {'0': 60, '1': 20, '2': 10, '3': 5, '4': 3, '5': 2}}"
+      }
+    ],
+    "chat_decisions": [
+      {
+        "scenario": "Technical Threshold Question",
+        "error": "'dict' object has no attribute 'parent_run_id'"
+      },
+      {
+        "scenario": "Operational Improvement Question",
+        "error": "'dict' object has no attribute 'parent_run_id'"
+      }
+    ]
+  }
+}
