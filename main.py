@@ -25,6 +25,8 @@ import io
 import time as time_module
 import asyncio
 
+from services.llm_service import LLMManager
+
 # Set up clean logging first thing
 logging.basicConfig(
     level=logging.INFO,
@@ -100,43 +102,14 @@ class OutageAnalysisState(TypedDict):
     chat_context: Dict
     errors: List[str]
 
-# ==================== LLM MANAGER WITH 2025 BEST PRACTICES ====================
-class LLMManager:
-    """Enhanced LLM manager following 2025 patterns"""
-    
-    def __init__(self):
-        self.llm = self._initialize_llm()
-        
-    def _initialize_llm(self):
-        """Initialize LLM with Claude as primary choice"""
-        try:
-            if os.getenv("ANTHROPIC_API_KEY"):
-                logger.info("🤖 Using Anthropic Claude (recommended)")
-                return ChatAnthropic(
-                    model="claude-3-sonnet-20240229",
-                    temperature=0.1,
-                    streaming=True
-                )
-            elif os.getenv("OPENAI_API_KEY"):
-                logger.info("🤖 Using OpenAI GPT-4 (fallback)")
-                return ChatOpenAI(
-                    model="gpt-4-turbo-preview", 
-                    temperature=0.1,
-                    streaming=True
-                )
-            else:
-                logger.error("❌ No LLM API keys found")
-                raise ValueError("Please set ANTHROPIC_API_KEY (recommended) or OPENAI_API_KEY in your .env file")
-        except Exception as e:
-            logger.error(f"❌ LLM initialization failed: {str(e)}")
-            raise
-    
-    def get_llm(self):
-        return self.llm
+# ==================== REMOVED DUPLICATE LLM MANAGER ====================
+# The LLMManager is now imported from services.llm_service to ensure
+# the single, correct version is used throughout the application.
+# class LLMManager: ... (Removed)
 
-# ==================== WEATHER SERVICE ====================
+# ==================== WEATHER SERVICE (API-based) ====================
 class WeatherService:
-    """Weather service for validation using Open-Meteo API"""
+    """Weather validation using Open-Meteo Historical API with caching"""
     
     def __init__(self):
         self.base_url = "https://archive-api.open-meteo.com/v1/archive"
@@ -466,7 +439,8 @@ class OutageVectorDB:
 def validate_outage_report(outage_report: dict, weather_data: dict) -> str:
     """Validate outage report against weather conditions using LLM analysis"""
     try:
-        llm_manager = LLMManager()
+        # Use the configured LLMManager
+        llm_manager = LLMManager(model_config=st.session_state.get('llm_config'))
         
         validation_prompt = ChatPromptTemplate.from_messages([
             ("system", """You are an expert power grid engineer specializing in outage validation.
@@ -532,7 +506,8 @@ Snowfall: {weather_data.get('snowfall', 'N/A')} cm
 def generate_comprehensive_report(validation_results: dict, raw_summary: dict) -> str:
     """Generate a comprehensive outage analysis report with false positive details and map data"""
     try:
-        llm_manager = LLMManager()
+        # Use the configured LLMManager
+        llm_manager = LLMManager(model_config=st.session_state.get('llm_config'))
         
         # Load the report generation prompt
         with open('prompts.json', 'r') as f:
@@ -571,15 +546,14 @@ def generate_comprehensive_report(validation_results: dict, raw_summary: dict) -
 
 @tool
 def generate_exhaustive_report(validation_results: dict, raw_summary: dict) -> str:
-    """Generate an exhaustive outage analysis report with detailed explanations for every decision"""
+    """Generate an exhaustive technical report with detailed explanations"""
     try:
-        llm_manager = LLMManager()
-        
-        # Load the exhaustive report generation prompt
+        # Use the configured LLMManager
+        llm_manager = LLMManager(model_config=st.session_state.get('llm_config'))
         with open('prompts.json', 'r') as f:
             prompts = json.load(f)
         
-        exhaustive_prompt = ChatPromptTemplate.from_messages([
+        report_prompt = ChatPromptTemplate.from_messages([
             ("system", prompts["exhaustive_report_generation"]["system"]),
             ("human", prompts["exhaustive_report_generation"]["human"])
         ])
@@ -604,17 +578,62 @@ def generate_exhaustive_report(validation_results: dict, raw_summary: dict) -> s
             ro['classification'] = 'REAL_OUTAGE'
             all_decisions.append(ro)
         
-        chain = exhaustive_prompt | llm_manager.get_llm()
+        # Limit data size to prevent LLM hanging
+        max_decisions = 50  # Limit to prevent context overload
+        limited_decisions = all_decisions[:max_decisions] if len(all_decisions) > max_decisions else all_decisions
         
-        response = chain.invoke({
-            "raw_summary": json.dumps(raw_summary, indent=2, default=str),
-            "validation_results": json.dumps(validation_results, indent=2, default=str),
-            "time_period": time_period,
-            "map_data": json.dumps(map_data, indent=2, default=str),
-            "all_decisions": json.dumps(all_decisions, indent=2, default=str),
-            "false_positives_count": len(false_positives),
-            "real_outages_count": len(real_outages)
-        })
+        # Truncate large text fields to prevent context explosion
+        def truncate_text_fields(obj, max_length=200):
+            if isinstance(obj, dict):
+                return {k: truncate_text_fields(v, max_length) for k, v in obj.items()}
+            elif isinstance(obj, list):
+                return [truncate_text_fields(item, max_length) for item in obj]
+            elif isinstance(obj, str) and len(obj) > max_length:
+                return obj[:max_length] + "..."
+            return obj
+        
+        # Apply truncation to prevent massive context
+        truncated_raw_summary = truncate_text_fields(raw_summary)
+        truncated_validation_results = truncate_text_fields(validation_results)
+        truncated_decisions = truncate_text_fields(limited_decisions)
+        
+        logger.info(f"📊 Exhaustive report: Processing {len(limited_decisions)}/{len(all_decisions)} decisions")
+        
+        chain = report_prompt | llm_manager.get_llm()
+        
+        logger.info("🤖 Invoking LLM for exhaustive report generation...")
+        try:
+            # Add timeout to prevent infinite hanging
+            import signal
+            
+            def timeout_handler(signum, frame):
+                raise TimeoutError("LLM call timed out after 300 seconds")
+            
+            signal.signal(signal.SIGALRM, timeout_handler)
+            signal.alarm(300)  # 5-minute timeout
+            
+            response = chain.invoke({
+                "raw_summary": json.dumps(truncated_raw_summary, indent=2, default=str),
+                "validation_results": json.dumps(truncated_validation_results, indent=2, default=str),
+                "time_period": time_period,
+                "map_data": json.dumps(map_data, indent=2, default=str),
+                "all_decisions": json.dumps(truncated_decisions, indent=2, default=str),
+                "false_positives_count": len(false_positives),
+                "real_outages_count": len(real_outages),
+                "decisions_shown": len(limited_decisions),
+                "total_decisions": len(all_decisions)
+            })
+            
+            signal.alarm(0)  # Cancel timeout
+            logger.info("✅ LLM response received successfully")
+            
+        except TimeoutError as e:
+            logger.error(f"❌ LLM call timed out: {str(e)}")
+            return "Exhaustive report generation timed out. The dataset may be too large. Try using the Default report mode or reducing the date range."
+        except Exception as e:
+            signal.alarm(0)  # Cancel timeout
+            logger.error(f"❌ LLM call failed: {str(e)}")
+            raise
         
         # Append map data section to the report
         report_content = response.content
@@ -630,7 +649,8 @@ def generate_exhaustive_report(validation_results: dict, raw_summary: dict) -> s
 def chat_about_results(question: str, context: dict) -> str:
     """Chat about validation results with full context"""
     try:
-        llm_manager = LLMManager()
+        # Use the configured LLMManager
+        llm_manager = LLMManager(model_config=st.session_state.get('llm_config'))
         
         # Check if we have sufficient validation context
         validation_results = context.get('validation_results', {})
@@ -1812,6 +1832,73 @@ def display_chat_interface():
                 st.session_state.chat_history = []
                 st.rerun()
 
+def display_llm_usage_monitoring():
+    """Display LLM usage monitoring statistics in the sidebar."""
+    st.subheader("📈 LLM Usage Monitoring")
+
+    usage_log_file = "llm_usage.log"
+
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("🔄 Refresh Usage Stats", use_container_width=True):
+            st.rerun()
+
+    if not os.path.exists(usage_log_file):
+        st.info("No usage data recorded yet. Run some analysis to see stats.")
+        return
+
+    try:
+        with open(usage_log_file, "r") as f:
+            lines = f.readlines()
+
+        if not lines:
+            st.info("No usage data recorded yet.")
+            return
+
+        usage_data = []
+        for line in lines:
+            try:
+                if line.strip():
+                    usage_data.append(json.loads(line))
+            except json.JSONDecodeError:
+                logger.warning(f"Skipping corrupted line in usage log: {line.strip()}")
+                continue
+        
+        if not usage_data:
+            st.info("No valid usage data recorded yet.")
+            return
+            
+        df = pd.DataFrame(usage_data)
+
+        # Download button
+        with col2:
+            csv_data = df.to_csv(index=False).encode('utf-8')
+            st.download_button(
+                label="📄 Download CSV",
+                data=csv_data,
+                file_name="llm_usage_report.csv",
+                mime="text/csv",
+                use_container_width=True
+            )
+
+        # Summary Stats
+        total_cost = df["cost"].sum()
+        total_tokens = df["total_tokens"].sum()
+        avg_latency = df["duration_seconds"].mean()
+
+        st.metric("💰 Total Estimated Cost", f"${total_cost:.4f}")
+        st.metric("🪙 Total Tokens Used", f"{total_tokens:,}")
+        st.metric("⏱️ Avg. Latency (sec)", f"{avg_latency:.2f}s")
+
+        with st.expander("Detailed Usage Log"):
+            st.dataframe(df[[
+                "timestamp", "model_name", "total_tokens", "cost", "duration_seconds"
+            ]], use_container_width=True)
+
+    except Exception as e:
+        st.error(f"Error reading usage log: {e}")
+
+
 # ==================== MAIN APPLICATION ====================
 def main():
     """Main Streamlit application"""
@@ -1924,13 +2011,90 @@ def main():
     with st.sidebar:
         st.header("🔧 Configuration")
         
+        # Initialize session state for LLM config on first run
+        if 'llm_config' not in st.session_state:
+            st.session_state.llm_config = {
+                "via": os.getenv("LLM_PROVIDER"),
+                "claude_model": os.getenv("CLAUDE_MODEL", "claude-3-sonnet-20240229"),
+                "openai_model": os.getenv("OPENAI_MODEL", "gpt-4-turbo-preview"),
+                "ollama_model": os.getenv("OLLAMA_MODEL", "llama3"),
+            }
+
+        # LLM Status Check and Model Selection
+        st.subheader("🤖 LLM Selection")
+        
+        try:
+            with open("pricing.json", "r") as f:
+                pricing_data = json.load(f)
+            claude_models = sorted([m for m in pricing_data if 'claude' in m])
+            openai_models = sorted([m for m in pricing_data if 'gpt' in m])
+            ollama_models = sorted([m for m in pricing_data if 'llama' in m])
+        except (FileNotFoundError, json.JSONDecodeError):
+            claude_models = ["claude-3-sonnet-20240229"]
+            openai_models = ["gpt-4-turbo-preview"]
+            ollama_models = ["llama3"]
+        
+        # Get current selections from session state to set dropdown indices
+        current_provider = st.session_state.llm_config.get("via") or "claude"
+        provider_options = ["claude", "openai", "ollama"]
+        provider_index = provider_options.index(current_provider) if current_provider in provider_options else 0
+
+        selected_provider = st.selectbox(
+            "Select LLM Provider",
+            provider_options,
+            index=provider_index
+        )
+
+        model_changed = False
+        if selected_provider == 'claude':
+            current_model = st.session_state.llm_config.get("claude_model")
+            model_index = claude_models.index(current_model) if current_model in claude_models else 0
+            selected_model = st.selectbox("Select Claude Model", claude_models, index=model_index)
+            if current_model != selected_model or current_provider != 'claude':
+                st.session_state.llm_config['via'] = 'claude'
+                st.session_state.llm_config['claude_model'] = selected_model
+                model_changed = True
+
+        elif selected_provider == 'openai':
+            current_model = st.session_state.llm_config.get("openai_model")
+            model_index = openai_models.index(current_model) if current_model in openai_models else 0
+            selected_model = st.selectbox("Select OpenAI Model", openai_models, index=model_index)
+            if current_model != selected_model or current_provider != 'openai':
+                st.session_state.llm_config['via'] = 'openai'
+                st.session_state.llm_config['openai_model'] = selected_model
+                model_changed = True
+        
+        else:  # ollama
+            current_model = st.session_state.llm_config.get("ollama_model")
+            model_index = ollama_models.index(current_model) if current_model in ollama_models else 0
+            selected_model = st.selectbox("Select Ollama Model", ollama_models, index=model_index)
+            if current_model != selected_model or current_provider != 'ollama':
+                st.session_state.llm_config['via'] = 'ollama'
+                st.session_state.llm_config['ollama_model'] = selected_model
+                model_changed = True
+        
+        if model_changed:
+            st.info("Model selection changed. New analyses will use the new model.")
+            # We don't need to rerun, the next tool call will pick up the new config
+        
         # LLM Status Check
         try:
-            llm_manager = LLMManager()
-            st.success("✅ Claude Connected")
+            # Use the configured LLMManager
+            llm_manager = LLMManager(model_config=st.session_state.get('llm_config'))
+            provider_info = llm_manager.get_provider_info()
+            
+            provider_name = provider_info.get('provider', 'Unknown')
+            model_name = provider_info.get('model', 'Unknown')
+
+            if 'Ollama' in str(llm_manager.llm):
+                provider_name = 'Ollama'
+
+            st.success(f"✅ {provider_name.capitalize()} Connected")
+            st.caption(f"Model: {model_name}")
+
         except ValueError as e:
             st.error(f"❌ {str(e)}")
-            st.info("💡 Add your API key to .env file")
+            st.info("💡 Add your API key to .env file or run Ollama.")
             return
         except Exception as e:
             st.error(f"❌ LLM Error: {str(e)}")
@@ -2067,6 +2231,8 @@ def main():
                         shutil.rmtree(cache_dir)
                     if os.path.exists("weather_cache.sqlite"):
                         os.remove("weather_cache.sqlite")
+                    if os.path.exists("llm_usage.log"):
+                        os.remove("llm_usage.log")
                     
                     # Reset session state
                     st.session_state.analysis_state = {
@@ -2093,6 +2259,9 @@ def main():
             st.write(f"**Real Outages:** {validation_stats.get('real_count', 0)}")
             st.write(f"**False Positives:** {validation_stats.get('false_positive_count', 0)}")
             st.write(f"**Accuracy:** {100 - validation_stats.get('false_positive_rate', 0):.1f}%")
+
+        st.divider()
+        display_llm_usage_monitoring()
     
     # Main content area - Always show cache info first
     cache_info = st.session_state.get('cache_info', {'exists': False})

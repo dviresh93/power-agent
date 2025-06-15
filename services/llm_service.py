@@ -19,6 +19,10 @@ from dotenv import load_dotenv
 # LLM imports - Claude as default with OpenAI fallback
 from langchain_anthropic import ChatAnthropic
 from langchain_openai import ChatOpenAI
+from langchain_community.chat_models import ChatOllama  # NEW: Ollama support
+
+# LangSmith monitoring
+from services.langsmith_service import LangSmithMonitor
 
 # Load environment variables
 load_dotenv()
@@ -57,37 +61,86 @@ class LLMManager:
                          Can override default model names, temperature, etc.
         """
         self.model_config = model_config or {}
+        self.langsmith_monitor = LangSmithMonitor()
         self.llm = self._initialize_llm()
         self.mcp_client = self._initialize_mcp() if MCP_AVAILABLE else None
+        # Log provider/model info after initialization
+        provider_info = self.get_provider_info()
+        logger.info(f"LLMManager initialized with provider: {provider_info.get('provider')}, model: {provider_info.get('model')}, streaming: {provider_info.get('streaming')}, mcp: {provider_info.get('mcp_available')}, langsmith: {self.langsmith_monitor.is_enabled()}")
         
     def _initialize_llm(self):
-        """Initialize LLM with Claude as primary choice, OpenAI as fallback."""
+        """Initialize LLM with Claude, OpenAI, or Ollama (Llama) as selected."""
         try:
-            # Get configuration with defaults
-            claude_model = self.model_config.get('claude_model', 'claude-3-sonnet-20240229')
-            openai_model = self.model_config.get('openai_model', 'gpt-4-turbo-preview')
-            temperature = self.model_config.get('temperature', 0.1)
-            streaming = self.model_config.get('streaming', True)
+            # Set up LangSmith environment variables if monitoring is enabled
+            if self.langsmith_monitor.is_enabled():
+                os.environ["LANGCHAIN_PROJECT"] = self.langsmith_monitor.project_name
+                os.environ["LANGCHAIN_TRACING_V2"] = "true"
+                logger.info(f"LangSmith tracing enabled for project: {self.langsmith_monitor.project_name}")
             
+            # Get configuration with defaults from model_config, then .env, then hardcoded
+            claude_model = self.model_config.get('claude_model', os.getenv('CLAUDE_MODEL', 'claude-3-sonnet-20240229'))
+            openai_model = self.model_config.get('openai_model', os.getenv('OPENAI_MODEL', 'gpt-4-turbo-preview'))
+            ollama_model = self.model_config.get('ollama_model', os.getenv('OLLAMA_MODEL', 'llama3'))
+            temperature = self.model_config.get('temperature', float(os.getenv('LLM_TEMPERATURE', 0.1)))
+            streaming = self.model_config.get('streaming', True)
+
+            # Set up callbacks for cost and usage tracking
+            callbacks = []
+            
+            # Add LangSmith cost tracking callback
+            try:
+                from services.langsmith_cost_tracker import create_langsmith_cost_tracker
+                cost_tracker = create_langsmith_cost_tracker()
+                callbacks.append(cost_tracker)
+                logger.info("💰 LangSmith cost tracking enabled")
+            except ImportError as e:
+                logger.warning(f"⚠️ LangSmith cost tracking not available: {e}")
+            
+            # Also add the existing usage tracker for file logging
+            try:
+                from services.usage_tracker import LLMUsageTracker
+                usage_tracker = LLMUsageTracker()
+                callbacks.append(usage_tracker)
+                logger.info("📊 File-based usage tracking enabled")
+            except ImportError as e:
+                logger.warning(f"⚠️ Usage tracker not available: {e}")
+
+            # Determine provider: 1. model_config['via'], 2. os.getenv('LLM_PROVIDER')
+            provider = self.model_config.get('via', os.getenv('LLM_PROVIDER'))
+
+            # Explicit provider selection from config or .env
+            if provider == 'ollama':
+                logger.info(f"🤖 Using Llama via Ollama (provider selected): {ollama_model}")
+                return ChatOllama(model=ollama_model, temperature=temperature, streaming=streaming, callbacks=callbacks)
+            
+            if provider == 'openai':
+                logger.info(f"🤖 Using OpenAI GPT-4 (provider selected): {openai_model}")
+                return ChatOpenAI(model=openai_model, temperature=temperature, streaming=streaming, callbacks=callbacks)
+
+            if provider == 'claude':
+                logger.info(f"🤖 Using Anthropic Claude (provider selected): {claude_model}")
+                return ChatAnthropic(model=claude_model, temperature=temperature, streaming=streaming, callbacks=callbacks)
+
+            # If no provider is selected, fallback to auto-detect based on API keys
+            logger.info("No LLM provider selected. Auto-detecting based on environment...")
             if os.getenv("ANTHROPIC_API_KEY"):
-                logger.info("🤖 Using Anthropic Claude (recommended)")
-                return ChatAnthropic(
-                    model=claude_model,
-                    temperature=temperature,
-                    streaming=streaming
-                )
-            elif os.getenv("OPENAI_API_KEY"):
-                logger.info("🤖 Using OpenAI GPT-4 (fallback)")
-                return ChatOpenAI(
-                    model=openai_model, 
-                    temperature=temperature,
-                    streaming=streaming
-                )
-            else:
-                logger.error("❌ No LLM API keys found")
-                raise ValueError(
-                    "Please set ANTHROPIC_API_KEY (recommended) or OPENAI_API_KEY in your .env file"
-                )
+                logger.info("🤖 Using Anthropic Claude (auto-detected from API key)")
+                return ChatAnthropic(model=claude_model, temperature=temperature, streaming=streaming, callbacks=callbacks)
+            
+            if os.getenv("OPENAI_API_KEY"):
+                logger.info("🤖 Using OpenAI GPT-4 (auto-detected from API key)")
+                return ChatOpenAI(model=openai_model, temperature=temperature, streaming=streaming, callbacks=callbacks)
+            
+            # Final fallback to Ollama if no keys or provider are set
+            try:
+                logger.info(f"🤖 Trying Llama via Ollama as final fallback: {ollama_model}")
+                return ChatOllama(model=ollama_model, temperature=temperature, streaming=streaming, callbacks=callbacks)
+            except Exception as ollama_exc:
+                logger.error(f"❌ Ollama fallback failed: {ollama_exc}")
+
+            logger.error("❌ No LLM provider found. Please set LLM_PROVIDER in your .env or an API key.")
+            raise ValueError("No LLM provider configured. Check .env or API keys.")
+            
         except Exception as e:
             logger.error(f"❌ LLM initialization failed: {str(e)}")
             raise
@@ -138,8 +191,17 @@ class LLMManager:
         Returns:
             Dictionary containing provider information
         """
+        # Correctly determine provider by checking the actual LLM instance type
+        provider = "unknown"
+        if isinstance(self.llm, ChatAnthropic):
+            provider = "anthropic"
+        elif isinstance(self.llm, ChatOpenAI):
+            provider = "openai"
+        elif isinstance(self.llm, ChatOllama):
+            provider = "ollama"
+
         llm_info = {
-            'provider': 'anthropic' if os.getenv("ANTHROPIC_API_KEY") else 'openai',
+            'provider': provider,
             'model': getattr(self.llm, 'model', 'unknown'),
             'temperature': getattr(self.llm, 'temperature', 'unknown'),
             'streaming': getattr(self.llm, 'streaming', False),
@@ -210,6 +272,46 @@ class LLMManager:
             Async stream of LLM responses
         """
         return self.llm.astream(messages, **kwargs)
+    
+    def get_monitoring_data(self, days: int = 7) -> Dict[str, Any]:
+        """
+        Get comprehensive monitoring data from LangSmith.
+        
+        Args:
+            days: Number of days to look back
+            
+        Returns:
+            Dictionary containing usage metrics and model breakdown
+        """
+        if not self.langsmith_monitor.is_enabled():
+            return {"error": "LangSmith monitoring not enabled"}
+        
+        return {
+            "usage_metrics": self.langsmith_monitor.get_usage_metrics(days),
+            "model_breakdown": self.langsmith_monitor.get_model_breakdown(days),
+            "project_info": self.langsmith_monitor.get_project_info()
+        }
+    
+    def export_monitoring_report(self, days: int = 30) -> str:
+        """
+        Export comprehensive monitoring report.
+        
+        Args:
+            days: Number of days to include in report
+            
+        Returns:
+            Path to exported report file
+        """
+        return self.langsmith_monitor.export_analytics_data(days)
+    
+    def get_langsmith_setup_instructions(self) -> str:
+        """
+        Get setup instructions for LangSmith.
+        
+        Returns:
+            Setup instructions string
+        """
+        return self.langsmith_monitor.setup_environment_variables()
 
 
 def create_llm_manager(model_config: Optional[Dict[str, Any]] = None) -> LLMManager:

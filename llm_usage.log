@@ -1,0 +1,8 @@
+{"timestamp": "2025-06-12 07:27:29", "run_id": "a6ec9f59-f6bf-40cd-80c9-ac3b7bf44d6d", "model_name": "llama3", "input_tokens": 0, "output_tokens": 0, "total_tokens": 0, "cost": 0.0, "duration_seconds": 446.87}
+{"timestamp": "2025-06-14 18:03:03", "run_id": "59d172b0-e9e1-49f1-9c48-1573196e17a2", "model_name": "llama3", "input_tokens": 0, "output_tokens": 0, "total_tokens": 0, "cost": 0.0, "duration_seconds": 270.46}
+{"timestamp": "2025-06-14 18:05:42", "run_id": "2630c663-f218-4ffa-8c3b-7aa94b31ac5a", "model_name": "unknown_model", "input_tokens": 0, "output_tokens": 0, "total_tokens": 0, "cost": 0.0, "duration_seconds": 31.99}
+{"timestamp": "2025-06-14 18:23:41", "run_id": "be13dc32-1443-4891-87e4-1aadced6ce05", "model_name": "llama3", "input_tokens": 0, "output_tokens": 0, "total_tokens": 0, "cost": 0.0, "duration_seconds": 5.04}
+{"timestamp": "2025-06-14 18:27:29", "run_id": "43656104-3b97-42e2-8df5-40dffb692514", "model_name": "unknown_model", "input_tokens": 0, "output_tokens": 0, "total_tokens": 0, "cost": 0.0, "duration_seconds": 31.09}
+{"timestamp": "2025-06-14 18:29:01", "run_id": "6ab4e8c9-97cc-4bf9-8811-09f2ee736f30", "model_name": "llama3", "input_tokens": 19, "output_tokens": 2, "total_tokens": 21, "cost": 0.0, "duration_seconds": 3.34}
+{"timestamp": "2025-06-14 18:32:24", "run_id": "a40dc0ee-3fac-416a-bb11-58a44b481ada", "model_name": "unknown_model", "input_tokens": 0, "output_tokens": 0, "total_tokens": 0, "cost": 0.0, "duration_seconds": 31.91}
+{"timestamp": "2025-06-14 18:35:16", "run_id": "bd9a1cf3-09c2-40c2-8f75-73d969664ab2", "model_name": "unknown_model", "input_tokens": 0, "output_tokens": 0, "total_tokens": 0, "cost": 0.0, "duration_seconds": 32.21}

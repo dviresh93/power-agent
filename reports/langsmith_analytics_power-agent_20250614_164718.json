@@ -1,0 +1,22 @@
+{
+  "export_timestamp": "2025-06-14T16:47:18.880000",
+  "project_info": {
+    "error": "'TracerSession' object has no attribute 'created_at'"
+  },
+  "usage_metrics": {
+    "period_days": 7,
+    "total_runs": 0,
+    "successful_runs": 0,
+    "failed_runs": 0,
+    "error_rate_percent": 0,
+    "total_input_tokens": 0,
+    "total_output_tokens": 0,
+    "total_tokens": 0,
+    "estimated_cost_usd": 0.0,
+    "avg_latency_seconds": 0,
+    "p95_latency_seconds": 0,
+    "runs_per_day": 0.0
+  },
+  "model_breakdown": {},
+  "period_days": 7
+}
