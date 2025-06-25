@@ -61,10 +61,10 @@ class OutageVectorDB:
                 doc_text = f"""Power outage on {row['DATETIME']} at coordinates {row['LATITUDE']}, {row['LONGITUDE']} affecting {row['CUSTOMERS']} customers."""
                 
                 metadata = {
-                    'datetime': row['DATETIME'],
-                    'latitude': float(row['LATITUDE']),
-                    'longitude': float(row['LONGITUDE']),
-                    'customers': int(row['CUSTOMERS']),
+                    'DATETIME': row['DATETIME'],  # PRESERVE ORIGINAL UPPERCASE FIELD NAMES
+                    'LATITUDE': float(row['LATITUDE']),
+                    'LONGITUDE': float(row['LONGITUDE']),
+                    'CUSTOMERS': int(row['CUSTOMERS']),
                     'date': row['DATETIME'][:10],
                     'hour': int(row['DATETIME'][11:13]) if len(row['DATETIME']) > 11 else 0
                 }

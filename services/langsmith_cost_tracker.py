@@ -59,7 +59,10 @@ class LangSmithCostTracker(BaseCallbackHandler):
         # Try different ways to get the model name
         model_name = (
             serialized.get("model") or 
-            serialized.get("model_name") or 
+            serialized.get("model_name") or
+            serialized.get("kwargs", {}).get("model") or
+            serialized.get("kwargs", {}).get("model_name") or
+            serialized.get("name") or
             serialized.get("_type", "unknown")
         )
         
@@ -68,7 +71,18 @@ class LangSmithCostTracker(BaseCallbackHandler):
             # Handle cases like "models/claude-3-sonnet-20240229"
             if "/" in model_name:
                 model_name = model_name.split("/")[-1]
-            return model_name
+            
+            # Map common model names to pricing keys
+            model_mappings = {
+                "claude-3-sonnet-20240229": "claude-3-sonnet",
+                "claude-3-haiku-20240307": "claude-3-haiku",
+                "claude-3-opus-20240229": "claude-3-opus",
+                "gpt-4-turbo-preview": "gpt-4-turbo",
+                "gpt-4-0125-preview": "gpt-4-turbo",
+                "gpt-3.5-turbo-0125": "gpt-3.5-turbo"
+            }
+            
+            return model_mappings.get(model_name, model_name)
         
         return "unknown"
     

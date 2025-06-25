@@ -1,0 +1,364 @@
+{
+  "report_metadata": {
+    "generation_timestamp": "2025-06-22T19:26:54.931999",
+    "report_type": "standard",
+    "source_pkl_file": "cache/analysis_results_20250622_182617.pkl",
+    "report_version": "1.0"
+  },
+  "executive_summary": "# Outage Analysis Report\n\n## EXECUTIVE SUMMARY\n\n### Key Findings\n- During the analyzed period from 2022-01-01 00:00:00 to 2022-01-01 05:15:00, a total of 10 outage reports were processed across 3 geographic locations in Illinois.\n- Out of the 10 reports, 3 (30%) were classified as real outages, while 7 (70%) were identified as false positives.\n- The total number of customers affected by the reported outages was 824, with an average of 8.24 customers per outage and a maximum of 44 customers affected by a single outage.\n\n### Impact\n- The high false positive rate of 70% indicates a significant number of resources may have been unnecessarily allocated to investigate and respond to non-existent outages.\n- False positives can lead to operational inefficiencies, increased costs, and potential customer dissatisfaction due to delayed or unnecessary responses.\n\n### Recommendations\n- Implement more robust data validation and filtering mechanisms to reduce the number of false positive reports.\n- Analyze patterns and root causes of false positives to identify potential sources of errors or anomalies in the data collection and processing systems.\n- Enhance weather data integration and correlation analysis to improve the accuracy of outage classifications based on weather conditions.\n- Investigate opportunities for predictive analytics and machine learning models to better distinguish between real outages and false positives.\n\n## OUTAGE ANALYSIS\n\n### Total Reports vs. Real Outages\n- Total outage reports processed: 10\n- Real outages identified: 3 (30%)\n- False positives identified: 7 (70%)\n\n### False Positive Rate\n- The false positive rate for the analyzed period was 0.7 or 70%.\n\n## FALSE POSITIVE ANALYSIS\n\n### Detailed Breakdown\n1. **Outage Report 1 (LATITUDE: 40.198069822261, LONGITUDE: -88.2625757588413, CUSTOMERS: 1)**\n   - Classification: False Positive\n   - Reasoning: The weather conditions (temperature of 8.0\u00b0C, no precipitation, and light winds) were not severe enough to cause a power outage. The isolated nature of the report (only 1 customer affected) also suggests a false positive.\n\n2. **Outage Report 2 (LATITUDE: 41.5911227663596, LONGITUDE: -88.4409952733574, CUSTOMERS: 5)**\n   - Classification: False Positive\n   - Reasoning: The weather conditions (temperature of 2.7\u00b0C, no precipitation, and light winds) were mild, and the small number of customers affected (5) is atypical for a weather-related outage.\n\n3. **Outage Report 3 (LATITUDE: 38.467527961177, LONGITUDE: -89.7420459799212, CUSTOMERS: 4)**\n   - Classification: False Positive\n   - Reasoning: The weather conditions (temperature of 15.6\u00b0C, light precipitation of 0.1 mm/h, and moderate winds) were not severe enough to cause an outage affecting multiple customers.\n\n4. **Outage Report 4 (LATITUDE: 37.6953040399123, LONGITUDE: -89.1178723644715, CUSTOMERS: 3)**\n   - Classification: False Positive\n   - Reasoning: The weather conditions (temperature of 15.9\u00b0C, light precipitation of 0.4 mm/h, and moderate winds) were relatively calm and unlikely to cause a real outage. The small number of customers affected (3) also suggests a false positive.\n\n5. **Outage Report 5 (LATITUDE: 41.5196064858341, LONGITUDE: -88.5491926048427, CUSTOMERS: 5)**\n   - Classification: False Positive\n   - Reasoning: The weather conditions (temperature of 2.4\u00b0C, no precipitation, and light winds) were not severe enough to cause a power outage. The small number of customers affected (5) is also atypical for a weather-related outage.\n\n6. **Outage Report 6 (LATITUDE: 40.3058327754338, LONGITUDE: -87.9733428958557, CUSTOMERS: 1)**\n   - Classification: False Positive\n   - Reasoning: The weather conditions (temperature of 8.2\u00b0C, no precipitation, and light winds) were mild, and the isolated nature",
+  "statistical_analysis": {
+    "basic_stats": {
+      "total_reports": 10,
+      "real_outages": 3,
+      "false_positives": 7,
+      "accuracy_rate": 0.3,
+      "false_positive_rate": 0.7
+    },
+    "confidence_analysis": {
+      "real_avg_confidence": 0.8000000000000002,
+      "false_avg_confidence": 0.7999999999999999,
+      "high_confidence_real": 0,
+      "high_confidence_false": 0
+    },
+    "customer_impact": {
+      "real_total_customers": 8,
+      "false_total_customers": 27,
+      "real_avg_customers": 2.6666666666666665,
+      "false_avg_customers": 3.857142857142857
+    }
+  },
+  "map_visualization": "cache/report_map_20250622_192654.html",
+  "raw_data_summary": {
+    "status": "loaded",
+    "total_records": 100,
+    "date_range": {
+      "start": "2022-01-01T00:00:00",
+      "end": "2022-01-01T05:15:00"
+    },
+    "geographic_bounds": {
+      "lat_min": 37.6953040399123,
+      "lat_max": 41.7206128856193,
+      "lon_min": -90.2382936628956,
+      "lon_max": -87.9733428958557
+    },
+    "customer_stats": {
+      "total_affected": 824,
+      "avg_per_outage": 8.24,
+      "max_single_outage": 44
+    },
+    "data_sample": [
+      {
+        "DATETIME": "2022-01-01 00:00:00",
+        "CUSTOMERS": 1,
+        "LATITUDE": 40.198069822261,
+        "LONGITUDE": -88.2625757588413,
+        "DATETIME_STR": "2022-01-01 00:00:00"
+      },
+      {
+        "DATETIME": "2022-01-01 00:00:00",
+        "CUSTOMERS": 5,
+        "LATITUDE": 41.5911227663596,
+        "LONGITUDE": -88.4409952733574,
+        "DATETIME_STR": "2022-01-01 00:00:00"
+      },
+      {
+        "DATETIME": "2022-01-01 00:00:00",
+        "CUSTOMERS": 4,
+        "LATITUDE": 38.467527961177,
+        "LONGITUDE": -89.7420459799212,
+        "DATETIME_STR": "2022-01-01 00:00:00"
+      }
+    ]
+  },
+  "validation_details": {
+    "real_outages": [
+      {
+        "classification": "REAL OUTAGE",
+        "confidence": 0.8,
+        "reasoning": "Based on the provided information, this outage report is likely a FALSE POSITIVE for the following reasons:\n\n1. Weather Conditions: The weather conditions at the reported time and location do not appear severe enough to cause a power outage. The temperature of 9.1\u00b0C (48.4\u00b0F) is within a normal range, there was no precipitation, and the wind speeds (9.0 km/h or 5.6 mph sustained, 13.7 km/h or 8.5 mph gusts) were relatively light.\n\n2. Lack of Severe Weather Factors: Typical causes of real outages, such as high winds (>40 km/h or 25 mph sustained, >56 km/h or 35 mph gusts), heavy precipitation (>12.7 mm/h or 0.5 in/h), ice/snow accumulation (>5 cm or 2 inches), temperature extremes (<-12\u00b0C or 10\u00b0F, >35\u00b0C or 95\u00b0F), or lightning strikes, were not present according to the provided weather data.\n\n3. Isolated Incident: The report indicates that only 1 customer was affected, which is unusual for a weather-related outage. Real outages caused by severe weather conditions typically affect a larger geographic area and a higher number of customers.\n\n4. Lack of Additional Information: Without further details about the specific cause, equipment involved, or other corroborating reports in the area, it is difficult to determine if this was a legitimate outage or a false positive caused by factors such as equipment malfunction, communication issues, or data processing errors.\n\nUnless additional information is provided that suggests a more plausible cause for the outage, such as a localized equipment failure or other non-weather-related incident, the mild weather conditions and isolated nature of this report point towards it being a FALSE POSITIVE rather than a REAL OUTAGE.",
+        "weather_factors": [],
+        "severity_score": 5,
+        "outage_id": "unknown",
+        "weather_data": {
+          "timestamp": "2022-01-01T00:15:00",
+          "coordinates": {
+            "lat": 39.9524848349067,
+            "lon": -88.2171776746549
+          },
+          "temperature": 9.1,
+          "precipitation": 0.0,
+          "wind_speed": 9.0,
+          "wind_gusts": 13.7,
+          "snowfall": 0.0,
+          "api_status": "success"
+        },
+        "LONGITUDE": -88.2171776746549,
+        "hour": 0,
+        "DATETIME": "2022-01-01 00:15:00",
+        "CUSTOMERS": 1,
+        "date": "2022-01-01",
+        "LATITUDE": 39.9524848349067
+      },
+      {
+        "classification": "REAL OUTAGE",
+        "confidence": 0.8,
+        "reasoning": "Based on the provided outage report details and weather conditions, this appears to be a FALSE POSITIVE.\n\nReasoning:\n1. Weather conditions at the time and location of the reported outage were relatively mild and unlikely to cause a widespread power outage.\n   - Temperature of 15.9\u00b0C (60.6\u00b0F) is within a normal range and not extreme.\n   - Precipitation rate of 0.2 mm/h (0.008 in/h) is very light and unlikely to cause issues.\n   - Wind speed of 16.1 km/h (10 mph) and gusts of 31.7 km/h (19.7 mph) are moderate but below typical thresholds for outage-causing winds.\n   - No snowfall or ice accumulation was reported.\n\n2. The number of customers affected (4) is relatively low, which could indicate a localized issue rather than a widespread outage caused by severe weather.\n\n3. The weather conditions reported do not align with typical causes of real outages, such as high winds, heavy precipitation, ice/snow accumulation, or extreme temperatures.\n\n4. Without any additional information about equipment failures, lightning strikes, or other potential causes, the mild weather conditions suggest this report may be a false positive.\n\nHowever, it's important to note that false positives can also occur due to factors other than weather, such as equipment malfunctions, communication issues, or data processing errors. Further investigation may be required to determine the root cause if this report is indeed a false positive.\n\nIn summary, based on the provided information and the mild weather conditions, I would classify this outage report as a FALSE POSITIVE. Additional context or evidence of severe weather or equipment failures would be needed to consider it a REAL OUTAGE.",
+        "weather_factors": [],
+        "severity_score": 5,
+        "outage_id": "unknown",
+        "weather_data": {
+          "timestamp": "2022-01-01T00:15:00",
+          "coordinates": {
+            "lat": 38.6364023527847,
+            "lon": -90.0443649327835
+          },
+          "temperature": 15.9,
+          "precipitation": 0.2,
+          "wind_speed": 16.1,
+          "wind_gusts": 31.7,
+          "snowfall": 0.0,
+          "api_status": "success"
+        },
+        "hour": 0,
+        "date": "2022-01-01",
+        "DATETIME": "2022-01-01 00:15:00",
+        "CUSTOMERS": 4,
+        "LATITUDE": 38.6364023527847,
+        "LONGITUDE": -90.0443649327835
+      },
+      {
+        "classification": "REAL OUTAGE",
+        "confidence": 0.8,
+        "reasoning": "Based on the provided outage report details and weather conditions, this appears to be a REAL OUTAGE. Here's my reasoning:\n\n1. Precipitation: The report indicates a precipitation rate of 0.6 mm/h, which is considered moderate rain. While not extremely heavy, this level of precipitation can potentially cause issues with power lines and equipment, especially if sustained over an extended period.\n\n2. Wind Gusts: The reported wind gust speed of 29.9 km/h (approximately 18.6 mph) is relatively high, although not severe. Wind gusts at this level can potentially cause tree branches or other debris to come into contact with power lines, leading to outages.\n\n3. Temperature: The temperature of 16.0\u00b0C (60.8\u00b0F) is within a normal range and is unlikely to be a direct cause of the outage.\n\n4. Snowfall: No snowfall is reported, so accumulation of ice or snow on power lines is not a factor in this case.\n\n5. Customers Affected: While the number of customers affected (3) is relatively low, it is not uncommon for localized outages to impact a small number of customers initially before potentially spreading to a larger area.\n\nGiven the moderate precipitation and gusty winds, it is plausible that these weather conditions could have caused a real outage, potentially due to wind-blown debris or water intrusion affecting power lines or equipment. The number of customers affected and the lack of extreme weather conditions suggest a localized issue rather than a widespread outage event.\n\nUnless there is additional information suggesting a false positive (e.g., known equipment malfunction, planned maintenance, or data processing errors), the provided details support classifying this report as a REAL OUTAGE caused by the combination of moderate rain and gusty winds.",
+        "weather_factors": [],
+        "severity_score": 5,
+        "outage_id": "unknown",
+        "weather_data": {
+          "timestamp": "2022-01-01T00:15:00",
+          "coordinates": {
+            "lat": 37.8329548200857,
+            "lon": -88.7852941396694
+          },
+          "temperature": 16.0,
+          "precipitation": 0.6,
+          "wind_speed": 15.8,
+          "wind_gusts": 29.9,
+          "snowfall": 0.0,
+          "api_status": "success"
+        },
+        "hour": 0,
+        "LATITUDE": 37.8329548200857,
+        "date": "2022-01-01",
+        "DATETIME": "2022-01-01 00:15:00",
+        "LONGITUDE": -88.7852941396694,
+        "CUSTOMERS": 3
+      }
+    ],
+    "false_positives": [
+      {
+        "classification": "FALSE POSITIVE",
+        "confidence": 0.8,
+        "reasoning": "Based on the provided information, this outage report is likely a FALSE POSITIVE for the following reasons:\n\n1. Weather Conditions: The weather conditions at the reported time and location do not appear severe enough to cause a power outage. The temperature of 8.0\u00b0C (46.4\u00b0F) is within a normal range, there was no precipitation, and the wind speeds (11.1 km/h or 6.9 mph sustained, 18.4 km/h or 11.4 mph gusts) were relatively light.\n\n2. Lack of Severe Weather Factors: Typical causes of real outages, such as high winds (>40 km/h or 25 mph sustained), heavy precipitation (>12.7 mm/h or 0.5 in/h), ice/snow accumulation (>5 cm or 2 inches), temperature extremes (<-12\u00b0C or 10\u00b0F, >35\u00b0C or 95\u00b0F), or lightning strikes, were not present according to the provided weather data.\n\n3. Isolated Incident: The report mentions only 1 customer affected, which could indicate a localized issue rather than a widespread outage caused by severe weather conditions.\n\nWhile it is possible that the outage was caused by an equipment failure or other isolated incident, the lack of severe weather factors and the isolated nature of the report suggest that it is more likely a false positive. This could be due to factors such as a sensor malfunction, a planned maintenance activity being misreported, a data processing error, or a network communication issue.\n\nTherefore, based on the available information, I would classify this outage report as a FALSE POSITIVE. However, it is always recommended to investigate further and cross-reference with other data sources to confirm the classification.",
+        "weather_factors": [],
+        "severity_score": 5,
+        "outage_id": "unknown",
+        "weather_data": {
+          "timestamp": "2022-01-01T00:00:00",
+          "coordinates": {
+            "lat": 40.198069822261,
+            "lon": -88.2625757588413
+          },
+          "temperature": 8.0,
+          "precipitation": 0.0,
+          "wind_speed": 11.1,
+          "wind_gusts": 18.4,
+          "snowfall": 0.0,
+          "api_status": "success"
+        },
+        "LATITUDE": 40.198069822261,
+        "date": "2022-01-01",
+        "DATETIME": "2022-01-01 00:00:00",
+        "hour": 0,
+        "LONGITUDE": -88.2625757588413,
+        "CUSTOMERS": 1
+      },
+      {
+        "classification": "FALSE POSITIVE",
+        "confidence": 0.8,
+        "reasoning": "Based on the provided information, this outage report is likely a FALSE POSITIVE for the following reasons:\n\n1. Weather Conditions: The weather conditions at the reported time and location do not appear severe enough to cause a power outage. The temperature of 2.7\u00b0C (around 37\u00b0F) is not extreme, there was no precipitation, and the wind speeds (11.5 km/h or around 7 mph sustained, with gusts up to 22.3 km/h or around 14 mph) were relatively light.\n\n2. Lack of Typical Outage Causes: Real outages are typically caused by high winds (sustained over 25 mph or gusts over 35 mph), heavy precipitation (over 0.5 inches/hour), ice/snow accumulation (over 2 inches), temperature extremes (below 10\u00b0F or above 95\u00b0F), lightning strikes, equipment failures during severe weather, or fallen trees due to wind/ice. None of these conditions seem to be present in this report.\n\n3. Small Number of Customers Affected: The report indicates only 5 customers were affected, which is a relatively small number. Real outages, especially those caused by severe weather, often affect a larger geographic area and a higher number of customers.\n\nWhile it is possible that this outage was caused by a localized equipment failure or other isolated issue, the lack of severe weather conditions and the small number of customers affected suggest that this report is more likely a false positive. It could be due to a sensor malfunction, a planned maintenance activity being misreported, a data processing error, or some other non-weather-related issue.\n\nTherefore, based on the provided information, I would classify this outage report as a FALSE POSITIVE. However, it is always recommended to investigate further and cross-reference with other data sources to confirm the classification.",
+        "weather_factors": [],
+        "severity_score": 5,
+        "outage_id": "unknown",
+        "weather_data": {
+          "timestamp": "2022-01-01T00:00:00",
+          "coordinates": {
+            "lat": 41.5911227663596,
+            "lon": -88.4409952733574
+          },
+          "temperature": 2.7,
+          "precipitation": 0.0,
+          "wind_speed": 11.5,
+          "wind_gusts": 22.3,
+          "snowfall": 0.0,
+          "api_status": "success"
+        },
+        "LATITUDE": 41.5911227663596,
+        "date": "2022-01-01",
+        "hour": 0,
+        "DATETIME": "2022-01-01 00:00:00",
+        "LONGITUDE": -88.4409952733574,
+        "CUSTOMERS": 5
+      },
+      {
+        "classification": "FALSE POSITIVE",
+        "confidence": 0.8,
+        "reasoning": "Based on the provided outage report details and weather conditions, this appears to be a FALSE POSITIVE.\n\nReasoning:\n1. Temperature: 15.6\u00b0C (60\u00b0F) is a mild temperature that is unlikely to cause equipment failures or outages.\n\n2. Precipitation: 0.1 mm/h (0.004 inches/hour) is very light precipitation, far below the threshold of 12.7 mm/hour (0.5 inches/hour) that could potentially cause outages.\n\n3. Wind Speed: 16.2 km/h (10 mph) is a relatively light wind speed that is unlikely to cause significant damage or outages.\n\n4. Wind Gusts: 32.4 km/h (20 mph) is a moderate gust speed, but still below the typical threshold of 56 km/h (35 mph) for outage-causing wind gusts.\n\n5. Snowfall: 0.0 cm (0 inches) indicates no snow accumulation, which eliminates the possibility of outages due to ice or snow buildup.\n\n6. Number of Customers Affected: Only 4 customers affected is a relatively small number, which could indicate a localized issue rather than a widespread outage caused by severe weather.\n\nGiven the mild weather conditions and the lack of any significant precipitation, wind, or temperature extremes, it is highly unlikely that these conditions would cause a real outage affecting multiple customers. The report is more consistent with a false positive, potentially caused by equipment malfunction, data processing errors, or other non-weather-related factors.\n\nTherefore, based on the available information, I would classify this outage report as a FALSE POSITIVE.",
+        "weather_factors": [],
+        "severity_score": 5,
+        "outage_id": "unknown",
+        "weather_data": {
+          "timestamp": "2022-01-01T00:00:00",
+          "coordinates": {
+            "lat": 38.467527961177,
+            "lon": -89.7420459799212
+          },
+          "temperature": 15.6,
+          "precipitation": 0.1,
+          "wind_speed": 16.2,
+          "wind_gusts": 32.4,
+          "snowfall": 0.0,
+          "api_status": "success"
+        },
+        "LONGITUDE": -89.7420459799212,
+        "CUSTOMERS": 4,
+        "hour": 0,
+        "LATITUDE": 38.467527961177,
+        "DATETIME": "2022-01-01 00:00:00",
+        "date": "2022-01-01"
+      },
+      {
+        "classification": "FALSE POSITIVE",
+        "confidence": 0.8,
+        "reasoning": "Based on the provided outage report details and weather conditions, this appears to be a FALSE POSITIVE.\n\nReasoning:\n1. The temperature of 15.9\u00b0C (60.6\u00b0F) is within a normal range and not extreme enough to cause equipment failures or outages.\n\n2. The precipitation rate of 0.4 mm/h (0.016 in/h) is very light and unlikely to cause any significant issues.\n\n3. The wind speed of 17.4 km/h (10.8 mph) and wind gusts of 32.4 km/h (20.1 mph) are relatively mild and below the typical thresholds for causing outages due to high winds.\n\n4. There was no reported snowfall or ice accumulation, which could potentially lead to outages.\n\n5. The weather conditions overall are relatively calm and do not exhibit any severe weather patterns that would typically result in a real outage event.\n\n6. The number of customers affected (3) is relatively small, which could indicate a localized issue rather than a widespread outage caused by severe weather.\n\nUnless there were other extenuating circumstances not mentioned in the report, such as equipment failures or planned maintenance activities, the mild weather conditions suggest that this outage report is likely a FALSE POSITIVE. It may have been caused by a sensor malfunction, data processing error, or other non-weather-related issue.",
+        "weather_factors": [],
+        "severity_score": 5,
+        "outage_id": "unknown",
+        "weather_data": {
+          "timestamp": "2022-01-01T00:00:00",
+          "coordinates": {
+            "lat": 37.6953040399123,
+            "lon": -89.1178723644715
+          },
+          "temperature": 15.9,
+          "precipitation": 0.4,
+          "wind_speed": 17.4,
+          "wind_gusts": 32.4,
+          "snowfall": 0.0,
+          "api_status": "success"
+        },
+        "LONGITUDE": -89.1178723644715,
+        "CUSTOMERS": 3,
+        "DATETIME": "2022-01-01 00:00:00",
+        "date": "2022-01-01",
+        "LATITUDE": 37.6953040399123,
+        "hour": 0
+      },
+      {
+        "classification": "FALSE POSITIVE",
+        "confidence": 0.8,
+        "reasoning": "Based on the provided information, this outage report is likely a FALSE POSITIVE for the following reasons:\n\n1. Weather Conditions: The weather conditions at the reported time and location do not appear severe enough to cause a power outage. The temperature of 2.4\u00b0C (36.3\u00b0F) is not extreme, there was no precipitation or snowfall, and the wind speeds (12.7 km/h or 7.9 mph sustained, 21.6 km/h or 13.4 mph gusts) were relatively light.\n\n2. Typical Outage Causes: Real outages are typically caused by high winds (sustained >40 km/h or 25 mph, gusts >56 km/h or 35 mph), heavy precipitation (>12.7 mm/h or 0.5 inches/h), significant ice/snow accumulation (>5 cm or 2 inches), or extreme temperatures (<-12\u00b0C or 10\u00b0F, >35\u00b0C or 95\u00b0F). None of these conditions were present at the reported time and location.\n\n3. Number of Customers Affected: While not a definitive factor, the relatively small number of customers affected (5) could indicate a localized issue rather than a widespread outage caused by severe weather.\n\nUnless there were other extenuating circumstances not mentioned in the report, such as equipment failures or fallen trees unrelated to weather, the mild weather conditions suggest this outage report is likely a false positive. It could be due to factors like sensor malfunctions, communication issues, data processing errors, or misreported maintenance activities.\n\nTo make a more definitive determination, it would be helpful to cross-reference this report with other outage reports in the area at the same time, as well as any known equipment issues or maintenance activities. Additionally, analyzing historical data for similar weather conditions and the frequency of false positives could provide further context.",
+        "weather_factors": [],
+        "severity_score": 5,
+        "outage_id": "unknown",
+        "weather_data": {
+          "timestamp": "2022-01-01T00:15:00",
+          "coordinates": {
+            "lat": 41.5196064858341,
+            "lon": -88.5491926048427
+          },
+          "temperature": 2.4,
+          "precipitation": 0.0,
+          "wind_speed": 12.7,
+          "wind_gusts": 21.6,
+          "snowfall": 0.0,
+          "api_status": "success"
+        },
+        "date": "2022-01-01",
+        "hour": 0,
+        "LATITUDE": 41.5196064858341,
+        "LONGITUDE": -88.5491926048427,
+        "CUSTOMERS": 5,
+        "DATETIME": "2022-01-01 00:15:00"
+      },
+      {
+        "classification": "FALSE POSITIVE",
+        "confidence": 0.8,
+        "reasoning": "Based on the provided outage report details and weather conditions, this appears to be a FALSE POSITIVE.\n\nReasoning:\n1. Temperature: The temperature of 8.2\u00b0C (46.8\u00b0F) is within a normal range and not extreme enough to cause widespread outages.\n\n2. Precipitation: There was no precipitation reported (0.0 mm/h), ruling out heavy rain or snowfall as a potential cause.\n\n3. Wind Speed: The wind speed of 11.8 km/h (7.3 mph) is relatively light and unlikely to cause significant damage or outages.\n\n4. Wind Gusts: While the wind gusts reached 20.2 km/h (12.6 mph), this is still below the typical threshold of 35 mph (56 km/h) for wind-related outages.\n\n5. Snowfall: There was no snowfall reported (0.0 cm), eliminating the possibility of ice accumulation or heavy snow causing outages.\n\n6. Customers Affected: Only 1 customer was affected, which is unusual for a widespread outage caused by severe weather conditions.\n\nGiven the mild weather conditions and the fact that only a single customer was affected, it is highly unlikely that this outage was caused by severe weather or equipment failures. It is more plausible that this report was a false positive, potentially due to a sensor malfunction, data processing error, or a planned maintenance activity being misreported.\n\nTherefore, based on the available information, I would classify this outage report as a FALSE POSITIVE.",
+        "weather_factors": [],
+        "severity_score": 5,
+        "outage_id": "unknown",
+        "weather_data": {
+          "timestamp": "2022-01-01T00:30:00",
+          "coordinates": {
+            "lat": 40.3058327754338,
+            "lon": -87.9733428958557
+          },
+          "temperature": 8.2,
+          "precipitation": 0.0,
+          "wind_speed": 11.8,
+          "wind_gusts": 20.2,
+          "snowfall": 0.0,
+          "api_status": "success"
+        },
+        "LONGITUDE": -87.9733428958557,
+        "DATETIME": "2022-01-01 00:30:00",
+        "LATITUDE": 40.3058327754338,
+        "CUSTOMERS": 1,
+        "date": "2022-01-01",
+        "hour": 0
+      },
+      {
+        "classification": "FALSE POSITIVE",
+        "confidence": 0.8,
+        "reasoning": "Based on the provided outage report details and weather conditions, this appears to be a FALSE POSITIVE.\n\nReasoning:\n1. Temperature: The temperature of 7.5\u00b0C (45.5\u00b0F) is within a normal range and not extreme enough to cause equipment failures or outages.\n\n2. Precipitation: There was no precipitation reported (0.0 mm/h), ruling out the possibility of heavy rain, snow, or ice accumulation causing outages.\n\n3. Wind Speed: The wind speed of 12.0 km/h (7.5 mph) is relatively calm and well below the threshold for high winds that could potentially cause outages (typically sustained winds >40 km/h or 25 mph).\n\n4. Wind Gusts: The reported wind gusts of 19.8 km/h (12.3 mph) are also relatively light and unlikely to cause significant damage or outages.\n\n5. Snowfall: There was no snowfall reported (0.0 cm), eliminating the possibility of heavy snow accumulation leading to outages.\n\nOverall, the weather conditions at the time and location of the reported outage were mild, with no severe weather events or extreme conditions that would typically cause widespread power outages. Unless there were other factors not mentioned in the report, such as equipment failures or planned maintenance, this outage report is likely a false positive due to the benign weather conditions.",
+        "weather_factors": [],
+        "severity_score": 5,
+        "outage_id": "unknown",
+        "weather_data": {
+          "timestamp": "2022-01-01T00:30:00",
+          "coordinates": {
+            "lat": 39.6911370257323,
+            "lon": -89.1672192950395
+          },
+          "temperature": 7.5,
+          "precipitation": 0.0,
+          "wind_speed": 12.0,
+          "wind_gusts": 19.8,
+          "snowfall": 0.0,
+          "api_status": "success"
+        },
+        "LONGITUDE": -89.1672192950395,
+        "date": "2022-01-01",
+        "hour": 0,
+        "CUSTOMERS": 8,
+        "DATETIME": "2022-01-01 00:30:00",
+        "LATITUDE": 39.6911370257323
+      }
+    ],
+    "total_processed": 10,
+    "validation_complete": true,
+    "processing_stats": {
+      "success_rate": 1.0,
+      "real_outage_rate": 0.3,
+      "false_positive_rate": 0.7
+    }
+  },
+  "processing_metadata": {
+    "processing_time": {
+      "data_loading": 5.167255640029907,
+      "validation": 74.2335102558136
+    },
+    "total_records": 100,
+    "processed_count": 10
+  }
+}

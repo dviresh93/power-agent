@@ -88,10 +88,10 @@ class OutageVectorDB:
                 doc_text = f"""Power outage on {row['DATETIME']} at coordinates {row['LATITUDE']}, {row['LONGITUDE']} affecting {row['CUSTOMERS']} customers."""
                 
                 metadata = {
-                    'datetime': row['DATETIME'],
-                    'latitude': float(row['LATITUDE']),
-                    'longitude': float(row['LONGITUDE']),
-                    'customers': int(row['CUSTOMERS']),
+                    'DATETIME': row['DATETIME'],
+                    'LATITUDE': float(row['LATITUDE']),
+                    'LONGITUDE': float(row['LONGITUDE']),
+                    'CUSTOMERS': int(row['CUSTOMERS']),
                     'date': row['DATETIME'][:10],
                     'hour': int(row['DATETIME'][11:13]) if len(row['DATETIME']) > 11 else 0
                 }
@@ -221,7 +221,7 @@ class OutageVectorDB:
                 query_texts=[f"outages between {start_datetime.strftime('%Y-%m-%d')} and {end_datetime.strftime('%Y-%m-%d')}"],
                 n_results=100,
                 where={
-                    "datetime": {
+                    "DATETIME": {
                         "$gte": start_datetime.strftime('%Y-%m-%d %H:%M:%S'),
                         "$lte": end_datetime.strftime('%Y-%m-%d %H:%M:%S')
                     }
@@ -257,10 +257,10 @@ class OutageVectorDB:
             results = self.collection.get(
                 where={
                     "$and": [
-                        {"latitude": {"$gte": center_lat - lat_radius}},
-                        {"latitude": {"$lte": center_lat + lat_radius}},
-                        {"longitude": {"$gte": center_lon - lon_radius}},
-                        {"longitude": {"$lte": center_lon + lon_radius}}
+                        {"LATITUDE": {"$gte": center_lat - lat_radius}},
+                        {"LATITUDE": {"$lte": center_lat + lat_radius}},
+                        {"LONGITUDE": {"$gte": center_lon - lon_radius}},
+                        {"LONGITUDE": {"$lte": center_lon + lon_radius}}
                     ]
                 }
             )

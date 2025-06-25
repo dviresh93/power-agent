@@ -1,0 +1,54 @@
+{
+  "real_outages": [
+    {
+      "LATITUDE": 40.7128,
+      "LONGITUDE": -74.006,
+      "DATETIME": "2024-01-15 14:30:00",
+      "CUSTOMERS": 150,
+      "classification": "REAL OUTAGE",
+      "confidence": 0.92,
+      "reasoning": "High winds and heavy precipitation detected",
+      "weather_factors": [
+        "high_winds",
+        "heavy_rain"
+      ],
+      "severity_score": 8
+    },
+    {
+      "LATITUDE": 40.758,
+      "LONGITUDE": -73.9855,
+      "DATETIME": "2024-01-15 16:45:00",
+      "CUSTOMERS": 85,
+      "classification": "REAL OUTAGE",
+      "confidence": 0.88,
+      "reasoning": "Ice accumulation on power lines",
+      "weather_factors": [
+        "ice_accumulation",
+        "freezing_temperature"
+      ],
+      "severity_score": 7
+    }
+  ],
+  "false_positives": [
+    {
+      "LATITUDE": 40.7489,
+      "LONGITUDE": -73.968,
+      "DATETIME": "2024-01-15 12:15:00",
+      "CUSTOMERS": 45,
+      "classification": "FALSE POSITIVE",
+      "confidence": 0.85,
+      "reasoning": "Mild weather conditions, likely sensor malfunction",
+      "weather_factors": [
+        "mild_conditions"
+      ],
+      "severity_score": 2
+    }
+  ],
+  "total_processed": 3,
+  "validation_complete": true,
+  "processing_stats": {
+    "success_rate": 1.0,
+    "real_outage_rate": 0.67,
+    "false_positive_rate": 0.33
+  }
+}

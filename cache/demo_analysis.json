@@ -1,0 +1,31 @@
+{
+  "real_outages": [
+    {
+      "LATITUDE": 40.7128,
+      "LONGITUDE": -74.006,
+      "DATETIME": "2024-01-15 14:30:00",
+      "CUSTOMERS": 150,
+      "classification": "REAL OUTAGE",
+      "confidence": 0.92,
+      "reasoning": "High winds and heavy precipitation detected"
+    }
+  ],
+  "false_positives": [
+    {
+      "LATITUDE": 40.7489,
+      "LONGITUDE": -73.968,
+      "DATETIME": "2024-01-15 12:15:00",
+      "CUSTOMERS": 45,
+      "classification": "FALSE POSITIVE",
+      "confidence": 0.85,
+      "reasoning": "Mild weather conditions, likely sensor malfunction"
+    }
+  ],
+  "validation_complete": true,
+  "metadata": {
+    "saved_at": "2025-06-22T16:08:55.128753",
+    "version": "1.0",
+    "agent_version": "langgraph-v1",
+    "format_version": "2025.1"
+  }
+}

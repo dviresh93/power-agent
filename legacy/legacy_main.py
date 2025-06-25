@@ -27,6 +27,11 @@ import asyncio
 
 from services.llm_service import LLMManager
 
+from cost_analyzer import CostAnalyzer, enhanced_usage_decorator
+
+cost_analyzer = CostAnalyzer()
+
+
 # Set up clean logging first thing
 logging.basicConfig(
     level=logging.INFO,
@@ -434,6 +439,126 @@ class OutageVectorDB:
             return {"error": str(e)}
 
 # ==================== LLM TOOLS FOLLOWING 2025 PATTERNS ====================
+
+@tool
+def validate_outage_report(outage_report: dict, weather_data: dict) -> str:
+    """Validate outage report against weather conditions using LLM analysis"""
+    try:
+        # Use the configured LLMManager
+        llm_manager = LLMManager(model_config=st.session_state.get('llm_config'))
+        
+        # ... existing validation code ...
+        
+        chain = validation_prompt | llm_manager.get_llm()
+        
+        # Track this as a validation operation
+        start_time = datetime.now()
+        response = chain.invoke({
+            "datetime": outage_report.get('datetime', 'Unknown'),
+            "latitude": outage_report.get('latitude', 'Unknown'),
+            "longitude": outage_report.get('longitude', 'Unknown'),
+            "customers": outage_report.get('customers', 'Unknown'),
+            "weather_summary": weather_summary
+        })
+        
+        # Log enhanced usage
+        cost_analyzer.log_enhanced_usage({
+            'operation_type': 'validation',
+            'model_name': llm_manager.get_provider_info().get('model', 'unknown'),
+            'timestamp': start_time.isoformat(),
+            'duration_seconds': (datetime.now() - start_time).total_seconds(),
+            'success': True,
+            'context': 'outage_validation'
+        })
+        
+        return response.content
+        
+    except Exception as e:
+        # Log failed operations
+        cost_analyzer.log_enhanced_usage({
+            'operation_type': 'validation',
+            'timestamp': datetime.now().isoformat(),
+            'success': False,
+            'error': str(e)
+        })
+        logger.error(f"❌ Validation error: {str(e)}")
+        return f"VALIDATION ERROR: {str(e)}"
+
+@tool  
+def generate_comprehensive_report(validation_results: dict, raw_summary: dict) -> str:
+    """Generate a comprehensive outage analysis report with enhanced tracking"""
+    try:
+        llm_manager = LLMManager(model_config=st.session_state.get('llm_config'))
+        
+        # ... existing report generation code ...
+        
+        start_time = datetime.now()
+        response = chain.invoke({
+            "raw_summary": json.dumps(raw_summary, indent=2, default=str),
+            "validation_results": json.dumps(validation_results, indent=2, default=str),
+            "time_period": time_period,
+            "map_data": json.dumps(map_data, indent=2, default=str)
+        })
+        
+        # Log enhanced usage
+        cost_analyzer.log_enhanced_usage({
+            'operation_type': 'report',
+            'report_type': 'standard',
+            'model_name': llm_manager.get_provider_info().get('model', 'unknown'),
+            'timestamp': start_time.isoformat(),
+            'duration_seconds': (datetime.now() - start_time).total_seconds(),
+            'success': True,
+            'context': 'comprehensive_report'
+        })
+        
+        return f"{response.content}\n\n{map_section}"
+        
+    except Exception as e:
+        cost_analyzer.log_enhanced_usage({
+            'operation_type': 'report',
+            'timestamp': datetime.now().isoformat(),
+            'success': False,
+            'error': str(e)
+        })
+        logger.error(f"❌ Report generation error: {str(e)}")
+        return f"Report generation error: {str(e)}"
+
+@tool
+def chat_about_results(question: str, context: dict) -> str:
+    """Chat about validation results with enhanced tracking"""
+    try:
+        llm_manager = LLMManager(model_config=st.session_state.get('llm_config'))
+        
+        # ... existing chat code ...
+        
+        start_time = datetime.now()
+        response = chain.invoke({
+            "user_question": question,
+            "analysis_context": json.dumps(context, indent=2, default=str)
+        })
+        
+        # Log enhanced usage
+        cost_analyzer.log_enhanced_usage({
+            'operation_type': 'chat',
+            'model_name': llm_manager.get_provider_info().get('model', 'unknown'),
+            'timestamp': start_time.isoformat(),
+            'duration_seconds': (datetime.now() - start_time).total_seconds(),
+            'success': True,
+            'context': 'results_chat',
+            'question_length': len(question)
+        })
+        
+        return response.content
+        
+    except Exception as e:
+        cost_analyzer.log_enhanced_usage({
+            'operation_type': 'chat',
+            'timestamp': datetime.now().isoformat(),
+            'success': False,
+            'error': str(e)
+        })
+        logger.error(f"❌ Chat error: {str(e)}")
+        return f"Chat error: {str(e)}"
 
 @tool
 def validate_outage_report(outage_report: dict, weather_data: dict) -> str:
@@ -1898,6 +2023,62 @@ def display_llm_usage_monitoring():
     except Exception as e:
         st.error(f"Error reading usage log: {e}")
 
+# Add this function to your main.py
+
+def display_cost_projections():
+    """Display cost projections and model comparisons in sidebar"""
+    from cost_analyzer import CostAnalyzer
+    
+    st.subheader("💰 Cost Projections")
+    
+    try:
+        cost_analyzer = CostAnalyzer()
+        
+        # Quick scenario buttons
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("📊 Usage Scenarios", use_container_width=True):
+                with st.spinner("Calculating projections..."):
+                    scenarios = cost_analyzer.calculate_usage_scenarios()
+                    
+                    if "error" not in scenarios:
+                        st.write("**Your Scenario (10 reports/day, 2hr chat):**")
+                        your_scenario = scenarios.get('your_scenario', {})
+                        if your_scenario:
+                            st.metric("Monthly Cost", f"${your_scenario['monthly_cost']:.2f}")
+                            st.metric("Daily Cost", f"${your_scenario['daily_cost']:.4f}")
+                        
+                        with st.expander("All Scenarios"):
+                            for name, data in scenarios.items():
+                                st.write(f"**{name.replace('_', ' ').title()}:** ${data['monthly_cost']:.2f}/month")
+                    else:
+                        st.info("Run some operations first to get projections")
+        
+        with col2:
+            if st.button("🤖 Model Comparison", use_container_width=True):
+                with st.spinner("Comparing models..."):
+                    comparisons = cost_analyzer.compare_models_for_scenario()
+                    
+                    st.write("**Monthly costs for your usage:**")
+                    for model, data in comparisons.items():
+                        st.write(f"• {model}: ${data['monthly_cost']:.2f}")
+        
+        # Full report download
+        if st.button("📄 Download Full Report", use_container_width=True):
+            report = cost_analyzer.generate_cost_report()
+            st.download_button(
+                label="💾 Download Cost Report",
+                data=report,
+                file_name=f"cost_analysis_{datetime.now().strftime('%Y%m%d')}.md",
+                mime="text/markdown"
+            )
+    
+    except Exception as e:
+        st.error(f"Cost analysis error: {str(e)}")
+
+# Add this call in your main() function sidebar, after display_llm_usage_monitoring():
+# st.divider()
+# display_cost_projections()
 
 # ==================== MAIN APPLICATION ====================
 def main():
@@ -2262,7 +2443,8 @@ def main():
 
         st.divider()
         display_llm_usage_monitoring()
-    
+        st.divider()
+        display_cost_projections()
     # Main content area - Always show cache info first
     cache_info = st.session_state.get('cache_info', {'exists': False})
     if cache_info['exists']:

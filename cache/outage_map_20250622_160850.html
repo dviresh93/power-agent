@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_39fd67c253ec7a0fa7834b244e6c4fbd {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+        <div style="position: fixed; top: 10px; right: 10px; z-index: 1000; 
+                    background-color: white; border: 2px solid grey; border-radius: 5px;
+                    padding: 10px;">
+            <h4>Legend</h4>
+            <p><span style="color: red;">●</span> Real Outages (2)</p>
+            <p><span style="color: blue;">●</span> False Positives (1)</p>
+        </div>
+        
+    
+            <div class="folium-map" id="map_39fd67c253ec7a0fa7834b244e6c4fbd" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_39fd67c253ec7a0fa7834b244e6c4fbd = L.map(
+                "map_39fd67c253ec7a0fa7834b244e6c4fbd",
+                {
+                    center: [40.7399, -73.98649999999999],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 10,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_5d080f8a67e3266c0b8b4e3e10140a54 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_5d080f8a67e3266c0b8b4e3e10140a54.addTo(map_39fd67c253ec7a0fa7834b244e6c4fbd);
+        
+    
+            var circle_marker_a6ef810d3eea2b1731484074e593df7e = L.circleMarker(
+                [40.7128, -74.006],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 3}
+            ).addTo(map_39fd67c253ec7a0fa7834b244e6c4fbd);
+        
+    
+        var popup_d89480e7728f42346bdcf433fd367748 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_24d4005f6c2842d84977fadd87750636 = $(`<div id="html_24d4005f6c2842d84977fadd87750636" style="width: 100.0%; height: 100.0%;">Real Outage - 150 customers</div>`)[0];
+                popup_d89480e7728f42346bdcf433fd367748.setContent(html_24d4005f6c2842d84977fadd87750636);
+            
+        
+
+        circle_marker_a6ef810d3eea2b1731484074e593df7e.bindPopup(popup_d89480e7728f42346bdcf433fd367748)
+        ;
+
+        
+    
+    
+            var circle_marker_6d3b7ddd12321334a30ff89f80afb007 = L.circleMarker(
+                [40.758, -73.9855],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 3}
+            ).addTo(map_39fd67c253ec7a0fa7834b244e6c4fbd);
+        
+    
+        var popup_68d2096c2960a09d330b68cfccfbf001 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_4f6b3a8262504260489e52e762fecdc0 = $(`<div id="html_4f6b3a8262504260489e52e762fecdc0" style="width: 100.0%; height: 100.0%;">Real Outage - 85 customers</div>`)[0];
+                popup_68d2096c2960a09d330b68cfccfbf001.setContent(html_4f6b3a8262504260489e52e762fecdc0);
+            
+        
+
+        circle_marker_6d3b7ddd12321334a30ff89f80afb007.bindPopup(popup_68d2096c2960a09d330b68cfccfbf001)
+        ;
+
+        
+    
+    
+            var circle_marker_197e6fa93413db101d965c087c2f3680 = L.circleMarker(
+                [40.7489, -73.968],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.5, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_39fd67c253ec7a0fa7834b244e6c4fbd);
+        
+    
+        var popup_ba841fc5b121666b5eb0002d876eba95 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_ff81901df6b801c5c52cfabef9945969 = $(`<div id="html_ff81901df6b801c5c52cfabef9945969" style="width: 100.0%; height: 100.0%;">False Positive - 45 customers</div>`)[0];
+                popup_ba841fc5b121666b5eb0002d876eba95.setContent(html_ff81901df6b801c5c52cfabef9945969);
+            
+        
+
+        circle_marker_197e6fa93413db101d965c087c2f3680.bindPopup(popup_ba841fc5b121666b5eb0002d876eba95)
+        ;
+
+        
+    
+</script>
+</html>

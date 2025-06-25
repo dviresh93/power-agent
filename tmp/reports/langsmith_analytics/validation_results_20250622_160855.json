@@ -1,0 +1,17 @@
+{
+  "real_outages": [
+    {
+      "LATITUDE": 40.7128,
+      "LONGITUDE": -74.006,
+      "CUSTOMERS": 150
+    }
+  ],
+  "false_positives": [
+    {
+      "LATITUDE": 40.7489,
+      "LONGITUDE": -73.968,
+      "CUSTOMERS": 45
+    }
+  ],
+  "validation_complete": true
+}
